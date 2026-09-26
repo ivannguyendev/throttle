@@ -1,0 +1,57 @@
+{
+  "name": "ts-starter",
+  "version": "0.0.1",
+  "description": "Template repo",
+  "homepage": "https://github.com/whthduck/ts-starter#readme",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "ivannguyendev",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "clean": "rimraf dist *tsbuildinfo",
+    "build": "APP_VERSION=$npm_package_version yarn clean && tsc --project tsconfig.build.json",
+    "build:docker": "tsc --project tsconfig.build.json",
+    "test": "yarn clean && tsc --build && ava reset-cache && ava"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:whthduck/ts-starter.git"
+  },
+  "keywords": [
+    "ts-starter",
+    "javascript",
+    "nodejs"
+  ],
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "devDependencies": {
+    "@ava/typescript": "^3.0.1",
+    "@types/debug": "^4.1.7",
+    "@types/node": "~12",
+    "ava": "^4.3.0",
+    "eslint": "~7.10",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-import": "2.22.1",
+    "rimraf": "~3.0",
+    "ts-loader": "~6.1",
+    "ts-node": "~8.4",
+    "tsconfig-paths": "~3.9"
+  },
+  "ava": {
+    "typescript": {
+      "rewritePaths": {
+        "src/": "dist/"
+      },
+      "compile": false
+    }
+  }
+}
