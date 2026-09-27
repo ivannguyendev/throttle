@@ -1,22 +1,15 @@
-# PREPARE NODE_MODULES IN PRODUCTION MODE
-FROM node:14.17-alpine as runner
+# Compiles src/ to dist/ without a local Node.js or pnpm.
+# docker-compose.yml copies the result back to the host.
+FROM node:24-alpine
 WORKDIR /usr/src/app
-COPY package.json ./
-# COPY yarn.lockfile ./yarn.lock
-RUN yarn --non-interactive --prod && yarn autoclean
 
-# BUILD FROM SOURCE
-FROM runner as builder
-WORKDIR /usr/src/app
-RUN npm install -g typescript@4.3.2
-COPY . .
-RUN yarn 
-RUN yarn build:docker
+# pnpm from npm, not corepack: Node.js stops bundling corepack from v25.
+RUN npm install -g pnpm@12.6.0
 
-# COPY FROM PREVIOUS STAGES  
-FROM node:14.17-alpine
-WORKDIR /usr/src/app
-COPY --from=runner /usr/src/app/node_modules node_modules
-COPY --from=builder /usr/src/app/dist dist
-USER 1
-CMD ["ls", "-al", "dist"]
+# Dependencies first, so a source edit reuses the cached install layer.
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY tsconfig.json tsconfig.build.json ./
+COPY src ./src
+RUN pnpm build:docker

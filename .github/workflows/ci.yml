@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the stale run; runs on main always finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          # pnpm is installed after this step, so skip setup-node's package-manager cache.
+          package-manager-cache: false
+
+      # npm, not corepack: Node.js stops bundling corepack from v25.
+      - name: Install pnpm
+        run: npm install -g pnpm@12.6.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Check package contents
+        run: npm pack --dry-run
+
+      - name: Smoke test the build
+        run: node -e "const t = require('./dist'); if (typeof t.ThrottleWindow !== 'function') process.exit(1)"
