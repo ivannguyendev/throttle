@@ -1,8 +1,8 @@
-# throttle-window
+# @ivann/throttle-window
 
-[![npm version](https://img.shields.io/npm/v/throttle-window.svg)](https://www.npmjs.com/package/throttle-window)
+[![npm version](https://img.shields.io/npm/v/@ivann/throttle-window.svg)](https://www.npmjs.com/package/@ivann/throttle-window)
 [![CI](https://github.com/ivannguyendev/throttle/actions/workflows/ci.yml/badge.svg)](https://github.com/ivannguyendev/throttle/actions/workflows/ci.yml)
-[![license](https://img.shields.io/npm/l/throttle-window.svg)](LICENSE)
+[![license](https://img.shields.io/npm/l/@ivann/throttle-window.svg)](LICENSE)
 
 Keyed leading + trailing throttle with a pluggable window store: Redis for clusters, in-memory for a single process. The first call for a key runs immediately, and all calls during the window collapse into exactly one trailing run.
 
@@ -35,7 +35,7 @@ Keyed leading + trailing throttle with a pluggable window store: Redis for clust
 ## Install
 
 ```bash
-npm i throttle-window
+npm i @ivann/throttle-window
 
 # Only for RedisEngine (optional peer dependency, ioredis >= 5)
 npm i ioredis
@@ -46,7 +46,7 @@ Requires Node.js >= 18. The package targets servers only, with no browser build.
 ## Quick start
 
 ```ts
-import { ThrottleWindow } from 'throttle-window';
+import { ThrottleWindow } from '@ivann/throttle-window';
 
 // Default engine: an in-memory MemoryEngine (single process).
 const throttle = new ThrottleWindow('sync:', { windowMs: 1000 });
@@ -78,14 +78,14 @@ const {
   ThrottleWindow,
   MemoryEngine,
   RedisEngine,
-} = require('throttle-window');
+} = require('@ivann/throttle-window');
 ```
 
 ## Redis and clusters
 
 ```ts
 import { Redis } from 'ioredis';
-import { RedisEngine, ThrottleWindow } from 'throttle-window';
+import { RedisEngine, ThrottleWindow } from '@ivann/throttle-window';
 
 const redis = new Redis('redis://localhost:6379', {
   // The throttle has no engine timeout: let the client fail fast instead.
@@ -232,7 +232,7 @@ For a single process. Expiry is measured with a monotonic clock (`performance.no
 
 ### Custom engines
 
-Implement `ThrottleEngine`, exported as a type (`import type { ThrottleEngine, ThrottleEngineSetOptions } from 'throttle-window'`). Keys arrive already prefixed.
+Implement `ThrottleEngine`, exported as a type (`import type { ThrottleEngine, ThrottleEngineSetOptions } from '@ivann/throttle-window'`). Keys arrive already prefixed.
 
 ```ts
 interface ThrottleEngineSetOptions {
@@ -263,7 +263,7 @@ Example for [node-redis](https://www.npmjs.com/package/redis) (not built in):
 
 ```ts
 import { createClient } from 'redis';
-import type { ThrottleEngine, ThrottleEngineSetOptions } from 'throttle-window';
+import type { ThrottleEngine, ThrottleEngineSetOptions } from '@ivann/throttle-window';
 
 type NodeRedisClient = ReturnType<typeof createClient>;
 
@@ -301,7 +301,7 @@ export class NodeRedisEngine implements ThrottleEngine {
 
 ## Errors
 
-All error classes are exported from `throttle-window`.
+All error classes are exported from `@ivann/throttle-window`.
 
 | Error                      | When                                                                                        | Extra field |
 | -------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
@@ -312,7 +312,7 @@ All error classes are exported from `throttle-window`.
 | `TypeError` / `RangeError` | Invalid `keyPrefix`, constructor options, or `job()` / `timeout()` arguments.               |             |
 
 ```ts
-import { ThrottleTimeoutError } from 'throttle-window';
+import { ThrottleTimeoutError } from '@ivann/throttle-window';
 
 try {
   await throttle

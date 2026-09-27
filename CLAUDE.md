@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-`throttle-window`: npm library (CommonJS + `.d.ts`, zero runtime deps) that gives you a keyed leading + trailing throttle with a pluggable window store (`MemoryEngine` by default, `RedisEngine` for ioredis 5/6). The user docs are in README.md. The architecture and the decision log (D1–D29) are in `docs/design-decisions.md`. Read it before you change behavior.
+`@ivann/throttle-window`: npm library (CommonJS + `.d.ts`, zero runtime deps) that gives you a keyed leading + trailing throttle with a pluggable window store (`MemoryEngine` by default, `RedisEngine` for ioredis 5/6). The user docs are in README.md. The architecture and the decision log (D1–D29) are in `docs/design-decisions.md`. Read it before you change behavior.
 
 ## Commands
 
