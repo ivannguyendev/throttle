@@ -1,57 +1,94 @@
 {
-  "name": "ts-starter",
-  "version": "0.0.1",
-  "description": "Template repo",
-  "homepage": "https://github.com/whthduck/ts-starter#readme",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "ivannguyendev",
-  "license": "MIT",
-  "private": false,
-  "files": [
-    "dist/"
+  "name": "throttle-window",
+  "version": "0.1.0",
+  "description": "Keyed leading + trailing throttle with a pluggable window store: Redis for clusters, in-memory for a single process.",
+  "keywords": [
+    "throttle",
+    "rate-limit",
+    "redis",
+    "ioredis",
+    "distributed",
+    "leading",
+    "trailing",
+    "window",
+    "coalesce"
   ],
-  "scripts": {
-    "clean": "rimraf dist *tsbuildinfo",
-    "build": "APP_VERSION=$npm_package_version yarn clean && tsc --project tsconfig.build.json",
-    "build:docker": "tsc --project tsconfig.build.json",
-    "test": "yarn clean && tsc --build && ava reset-cache && ava"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
+  "homepage": "https://github.com/ivannguyendev/throttle#readme",
+  "bugs": {
+    "url": "https://github.com/ivannguyendev/throttle/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:whthduck/ts-starter.git"
+    "url": "git+https://github.com/ivannguyendev/throttle.git"
   },
-  "keywords": [
-    "ts-starter",
-    "javascript",
-    "nodejs"
+  "license": "MIT",
+  "author": "ivannguyendev",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/"
   ],
-  "dependencies": {
-    "debug": "^4.3.4"
+  "engines": {
+    "node": ">=18"
   },
-  "devDependencies": {
-    "@ava/typescript": "^3.0.1",
-    "@types/debug": "^4.1.7",
-    "@types/node": "~12",
-    "ava": "^4.3.0",
-    "eslint": "~7.10",
-    "eslint-config-prettier": "6.11.0",
-    "eslint-plugin-import": "2.22.1",
-    "rimraf": "~3.0",
-    "ts-loader": "~6.1",
-    "ts-node": "~8.4",
-    "tsconfig-paths": "~3.9"
+  "scripts": {
+    "clean": "rimraf --glob dist dist-test '*.tsbuildinfo'",
+    "build": "APP_VERSION=$npm_package_version pnpm clean && tsc --project tsconfig.build.json",
+    "build:docker": "tsc --project tsconfig.build.json",
+    "test": "pnpm clean && tsc --build && ava reset-cache && ava",
+    "lint": "oxlint",
+    "format": "prettier --write src test",
+    "prepublishOnly": "pnpm lint && pnpm test && pnpm build"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24.12",
+      "onFail": "error"
+    }
+  },
+  "packageManager": "pnpm@12.6.0",
+  "publishConfig": {
+    "access": "public"
   },
   "ava": {
+    "files": [
+      "test/**/*.spec.ts"
+    ],
+    "timeout": "60s",
     "typescript": {
       "rewritePaths": {
-        "src/": "dist/"
+        "src/": "dist-test/src/",
+        "test/": "dist-test/test/"
       },
       "compile": false
     }
+  },
+  "peerDependencies": {
+    "ioredis": ">=5"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@ava/typescript": "^7.0.0",
+    "@types/node": "^24.13.6",
+    "ava": "^8.0.1",
+    "ioredis": "^6.0.0",
+    "ioredis5": "npm:ioredis@^5",
+    "oxlint": "^1.85.0",
+    "prettier": "^3.9.9",
+    "rimraf": "^6.1.3",
+    "typescript": "^7.0.2"
   }
 }

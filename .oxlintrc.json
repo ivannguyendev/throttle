@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "node": true
+  },
+  "ignorePatterns": ["dist", "dist-test"],
+  "rules": {
+    "typescript/no-explicit-any": "off"
+  }
+}

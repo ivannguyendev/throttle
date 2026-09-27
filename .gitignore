@@ -106,6 +106,7 @@ dist
 
 # compiled output
 /dist
+/dist-test
 /node_modules
 
 # Logs
@@ -141,3 +142,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 *cert*
+.agent
+.agents
+.claude

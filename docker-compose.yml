@@ -1,11 +1,19 @@
-version: '3.3'
-
+# Builds dist/ in a container, so the host needs only Docker:
+#   docker compose run --rm builder
+# The image is rebuilt on every run (pull_policy: build); the cached install
+# layer keeps that fast. dist/ is replaced and owned by the project's owner.
 services:
-  feedconn-builder:
-    build: ./
-    image: feedconn/builder
-    container_name: feedconn-builder
+  builder:
+    build: .
+    image: throttle-window-builder
+    pull_policy: build
     volumes:
-      - ./dist:/usr/src/dist
-    command: "cp -r dist .."
-
+      - .:/workspace
+    command:
+      - sh
+      - -c
+      - >-
+        rm -rf /workspace/dist &&
+        cp -R dist /workspace/dist &&
+        chown -R "$$(stat -c '%u:%g' /workspace)" /workspace/dist &&
+        ls -l /workspace/dist
