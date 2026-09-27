@@ -1,6 +1,6 @@
 {
   "name": "@ivannh/throttle-window",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Keyed leading + trailing throttle with a pluggable window store: Redis for clusters, in-memory for a single process.",
   "keywords": [
     "throttle",
